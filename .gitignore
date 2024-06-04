@@ -1,1 +1,3 @@
 build/
+*.sif
+.vscode/
