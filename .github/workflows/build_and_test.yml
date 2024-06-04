@@ -45,5 +45,5 @@ jobs:
 
     - name: Create container
       working-directory: ${{github.workspace}}
-      run: singularity build matrix_mult_cont.sif singul_container.def
+      run: sudo singularity build matrix_mult_cont.sif singul_container.def
 
