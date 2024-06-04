@@ -1,0 +1,29 @@
+Bootstrap: library
+From: ubuntu:20.04
+Stage: build
+
+%files
+    ./ /opt/matrix_mul
+
+%post
+    export TZ=Etc/UTC
+    export DEBIAN_FRONTEND=noninteractive 
+    apt update && apt upgrade -y
+    apt install -y cmake g++ build-essential openmpi-bin libopenmpi-dev
+    cd /opt/matrix_mul
+    rm -rf build
+    ./build.sh
+    cp matrixA.txt ./build
+    cp matrixB.txt ./build
+
+%runscript
+    cd /opt/matrix_mul/build
+    mpirun -n 2 ./main
+
+%labels
+    Author MH2033
+    Version v0.0.1
+
+%help
+    This is a demo container used to illustrate a def file that uses all
+    supported sections.
