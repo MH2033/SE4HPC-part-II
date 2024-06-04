@@ -8,6 +8,8 @@ on:
 
 env:
   BUILD_TYPE: Release
+  CLUSTER_USER: ${{ secrets.CINECA_USER }}
+  CLUSTER_PASS: ${{ secrets.CINECA_PASS }}
 
 jobs:
   build:
@@ -48,13 +50,13 @@ jobs:
       run: sudo env "PATH=$PATH" singularity build matrix_mult_cont.sif singul_container.def
 
     - name: Move to CINECA
-      run: sshpass -p ${{ secrets.CINECA_PASS }} scp -o StrictHostKeyChecking=accept-new \
+      run: sshpass -p ${{env.CLUSTER_PASS} scp -o StrictHostKeyChecking=accept-new \
         ${{github.workspace}}/job.sh ${{github.workspace}}/matrix_mult_cont.sif \ 
-        ${{ secrets.CINECA_USER }}@login.g100.cineca.it:~/
+        ${{env.CLUSTER_USER}}@login.g100.cineca.it:~/
 
     - name: Execute on CINECA cluster
-      run: sshpass -p ${{ secrets.CINECA_PASS }} \
+      run: sshpass -p ${{env.CLUSTER_PASS}} \
         ssh -o StrictHostKeyChecking=accept-new \
-        ${{ secrets.CINECA_USER }}@login.g100.cineca.it "sbatch job.sh"
+        ${{env.CLUSTER_USER}}@login.g100.cineca.it "sbatch job.sh"
 
 
